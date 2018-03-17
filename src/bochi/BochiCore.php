@@ -9,11 +9,14 @@
 namespace bochi;
 
 
-use Composer\Config;
+
 use pocketmine\plugin\PluginBase;
+use pocketmine\utils\Config;
 
 class BochiCore extends PluginBase
 {
+
+    public $setting;
 
     public function onEnable()
     {
@@ -32,11 +35,13 @@ class BochiCore extends PluginBase
     }
 
     public function setup() {
-        // TODO: file copy.
+        @mkdir($this->getDataFolder(), 0744);
+        $this->saveResource("setting.yml");
     }
 
     public function loadSetting() {
-        // TODO: file load
+        $this->setting = new Config($this->getDataFolder()."setting.yml", Config::YAML);
     }
+
 
 }
