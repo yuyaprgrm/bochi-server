@@ -1,0 +1,9 @@
+main: bochi\BochiCore
+name: BochiServer
+version: Alpha
+api:
+ - 3.0.0
+ - 3.0.0-ALPHA11
+author: fam!ma65536
+authors:
+ - MasterF@github.com/famima65536
