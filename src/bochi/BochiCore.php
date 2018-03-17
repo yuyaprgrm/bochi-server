@@ -10,6 +10,8 @@ namespace bochi;
 
 
 
+use bochi\database\DatabaseManager;
+use bochi\task\DatabaseTask;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 
@@ -32,6 +34,7 @@ class BochiCore extends PluginBase
         }
 
         $this->loadSetting();
+
     }
 
     public function setup() {

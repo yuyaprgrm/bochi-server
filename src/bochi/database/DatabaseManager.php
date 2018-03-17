@@ -14,7 +14,11 @@ class DatabaseManager
 
     public function __construct(array $setting)
     {
-        $this->db = new \mysqli($setting["host"], $setting["username"], $setting["password"], $setting["database"]);
+        $this->db = new \mysqli($setting["host"], $setting["username"], $setting["password"], $setting["name"]);
+    }
+
+    public function getPlayerData() {
+
     }
 
 }
