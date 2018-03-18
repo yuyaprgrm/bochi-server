@@ -11,6 +11,7 @@ namespace bochi\database;
 
 class DatabaseManager
 {
+    private $db; /** @var \mysqli */
 
     /**
      * DatabaseManager constructor.
