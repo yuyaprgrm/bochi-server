@@ -11,6 +11,7 @@ namespace bochi\database;
 
 class DatabaseManager
 {
+
     private $db; /** @var \mysqli */
 
     /**
@@ -33,16 +34,21 @@ class DatabaseManager
      *  "exp" => exp, 今までに手に入れた経験値
      * ]
      */
-    public function getPlayerData(string $name) : array
+    public function getPlayerData(string $name) : ?array
     {
         $db = $this->db;
-        $stmt = $db->prepare("SELECT id, name, quest_join_times, level, exp FROM player WHERE name = ?");
+        $stmt = $db->prepare("SELECT id, quest_join_times, level, exp FROM players WHERE name = ?");
         $stmt->bind_param("s", $name);
         $stmt->execute();
 
         $id = 0; $quest_join_times = 0;$level = 0;$exp = 0;
         $stmt->bind_result($id, $quest_join_times, $level, $exp);
-        $stmt->fetch();
+        $empty = $stmt->fetch();
+        $stmt->close();
+
+        if($empty == null) {
+            return null;
+        }
 
         return [
             "id" => $id,
@@ -51,6 +57,18 @@ class DatabaseManager
             "level" => $level,
             "exp" => $exp
         ];
+    }
+
+    public function createPlayerData(string $name) {
+        $db = $this->db;
+        $stmt = $db->prepare("INSERT INTO players(name, quest_join_times, level, exp) VALUES(?, 0, 0, 0)");
+        $stmt->bind_param("s", $name);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    public function close() {
+        $this->db->close();
     }
 
 }

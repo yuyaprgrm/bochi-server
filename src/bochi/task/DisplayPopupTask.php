@@ -29,6 +29,6 @@ class DisplayPopupTask extends PluginTask
      */
     public function onRun(int $currentTick)
     {
-        // TODO: Implement onRun() method.
+
     }
 }

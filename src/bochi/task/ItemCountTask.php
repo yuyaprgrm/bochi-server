@@ -52,6 +52,6 @@ class ItemCountTask extends AsyncTask
 
     public function onCompletion(Server $server)
     {
-        
+
     }
 }

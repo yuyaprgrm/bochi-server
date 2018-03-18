@@ -10,15 +10,17 @@ namespace bochi\task;
 
 
 use pocketmine\scheduler\AsyncTask;
+use pocketmine\Server;
 
 class DatabaseTask extends AsyncTask
 {
     private $func;
+    private $completionFunc;
 
-    public function __construct(\Closure $func)
+    public function __construct(\Closure $func, \Closure $completionFunc)
     {
-        $func->bindTo($this);
         $this->func = $func;
+        $this->completionFunc = $completionFunc;
     }
 
     /**
@@ -28,6 +30,13 @@ class DatabaseTask extends AsyncTask
      */
     public function onRun()
     {
-        ($this->func)();
+        $func = $this->func->bindTo($this);
+        $func();
+    }
+
+    public function onCompletion(Server $server)
+    {
+        $func = $this->completionFunc->bindTo($this);
+        $func();
     }
 }
