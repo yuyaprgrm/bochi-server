@@ -20,9 +20,9 @@ use pocketmine\utils\Config;
 
 class BochiCore extends PluginBase
 {
+    /** @var Config */
+    public $setting;
 
-    public $setting; /** @var Config */
-    static $instance;
 
     public function onLoad()
     {
@@ -89,6 +89,13 @@ class BochiCore extends PluginBase
 
     }
 
+    /** @var BochiCore */
+    private static $instance;
+
+    /**
+     * singleton
+     * @return BochiCore
+     */
     public static function getInstance() : BochiCore{
         return BochiCore::$instance;
     }
