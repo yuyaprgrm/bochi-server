@@ -12,6 +12,7 @@ namespace bochi;
 
 use bochi\database\DatabaseManager;
 use bochi\task\DatabaseTask;
+use bochi\task\DisplayPopupTask;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
@@ -55,10 +56,10 @@ class BochiCore extends PluginBase
     }
 
     /**
-     * @param Player $player
+     * @param string $name player's name
      * @param \Closure $callback
      */
-    public function existsPlayerData($name, \Closure $callback) {
+    public function existsPlayerData(string $name, \Closure $callback) {
         $db_setting = $this->setting->get("Database");
         $task = new DatabaseTask(function () use($name, $db_setting) {
             $manager = new DatabaseManager($db_setting);
@@ -69,7 +70,10 @@ class BochiCore extends PluginBase
         $this->getServer()->getScheduler()->scheduleAsyncTask($task);
     }
 
-    public function createPlayerData($name) {
+    /**
+     * @param string $name player's name
+     */
+    public function createPlayerData(string $name) {
         $db_setting = $this->setting->get("Database");
         $this->getServer()->getScheduler()->scheduleAsyncTask(new DatabaseTask(function () use($name, $db_setting){
             $manager = new DatabaseManager($db_setting);
@@ -77,6 +81,10 @@ class BochiCore extends PluginBase
             $manager->close();
         }, function() {
         }));
+    }
+
+    public function displayPopup(Player $player) {
+        $this->getServer()->getScheduler()->scheduleRepeatingTask(new DisplayPopupTask($this, $player), 20);
     }
 
     public static function getInstance() : BochiCore{

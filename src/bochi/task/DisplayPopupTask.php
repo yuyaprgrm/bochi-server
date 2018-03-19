@@ -9,15 +9,22 @@
 namespace bochi\task;
 
 
+use bochi\utils\Display;
+use pocketmine\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\scheduler\PluginTask;
 
 class DisplayPopupTask extends PluginTask
 {
 
-    public function __construct(Plugin $owner)
+    private $player;
+    private $display;
+
+    public function __construct(Plugin $owner, Player $player)
     {
         parent::__construct($owner);
+        $this->player = $player;
+        $this->display = Display::get($player);
     }
 
     /**
@@ -29,6 +36,9 @@ class DisplayPopupTask extends PluginTask
      */
     public function onRun(int $currentTick)
     {
-
+        if(!$this->player->isOnline()) { //オフライン時に
+            $this->getOwner()->getServer()->getScheduler()->cancelTask($this->getTaskId());
+        }
+        $this->player->sendPopup($this->display->getText());
     }
 }
