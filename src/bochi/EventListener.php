@@ -9,6 +9,7 @@
 namespace bochi;
 
 
+use bochi\utils\Display;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\Server;
@@ -22,13 +23,18 @@ class EventListener implements Listener
     }
 
     public function onPlayerLogin(PlayerLoginEvent $ev) {
-        $name = $ev->getPlayer()->getName();
+        $player = $ev->getPlayer();
+        $name = $player->getName();
         $func = function () use($name){
             $result = $this->getResult();
             if(!$result) {
                 BochiCore::getInstance()->createPlayerData($name);
             }
         };
-        BochiCore::getInstance()->existsPlayerData($ev->getPlayer(), $func);
+        BochiCore::getInstance()->existsPlayerData($player, $func);
+        BochiCore::getInstance()->displayPopup($player);
+        $display = Display::get($player);
+        $display->format = "§aHello §l%s§r§a !";
+        $display->args = [$name];
     }
 }

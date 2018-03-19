@@ -13,6 +13,7 @@ namespace bochi;
 use bochi\database\DatabaseManager;
 use bochi\task\DatabaseTask;
 use bochi\task\DisplayPopupTask;
+use bochi\utils\Display;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
@@ -85,6 +86,7 @@ class BochiCore extends PluginBase
 
     public function displayPopup(Player $player) {
         $this->getServer()->getScheduler()->scheduleRepeatingTask(new DisplayPopupTask($this, $player), 20);
+
     }
 
     public static function getInstance() : BochiCore{
