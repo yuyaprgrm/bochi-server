@@ -37,4 +37,6 @@ class EventListener implements Listener
         $display->format = "§aHello §l%s§r§a !";
         $display->args = [$name];
     }
+
+    public function on
 }
