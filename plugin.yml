@@ -7,3 +7,20 @@ api:
 author: fam!ma65536
 authors:
  - MasterF@github.com/famima65536
+
+permissions:
+  bochicore.*:
+    default: op
+    description: Allows to control all of function in BochiCoreAPI.
+    children:
+      bochicore.questcore.*:
+        default: op
+        descrption: Allows to controll all of function in QuestCoreAPI.
+        children:
+          bochicore.questcore.command.*:
+            default: op
+            description: Allows to use all of commands in QuestCoreAPI.
+            children:
+              bochicore.questcore.command.entry:
+                description: Allows to entry quests in the game.
+                default: true
