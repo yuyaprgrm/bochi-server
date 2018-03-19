@@ -8,7 +8,7 @@
 
 namespace bochi;
 
-
+use bochi\event\quest\EntryQuestEvent;
 use bochi\utils\Display;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerLoginEvent;
@@ -38,5 +38,7 @@ class EventListener implements Listener
         $display->args = [$name];
     }
 
-    public function on
+    public function onPlayerEntryQuest(EntryQuestEvent $ev) {
+
+    }
 }
