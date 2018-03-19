@@ -13,7 +13,7 @@ use pocketmine\event\Cancellable;
 use pocketmine\event\Event;
 use pocketmine\Player;
 
-class PlayerQuestStartEvent extends Event implements Cancellable
+class PlayerEntryQuestEvent extends Event implements Cancellable
 {
     public function __construct(Player $player)
     {
