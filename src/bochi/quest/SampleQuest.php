@@ -59,4 +59,14 @@ class SampleQuest extends BaseQuest
     {
         // TODO: Implement onCompletion() method.
     }
+
+    /**
+     * クエスト終了時に呼ばれます
+     * 途中で退出した場合やユーザーがクエストをリタイアした場合など、完了したかどうかはかかわりません
+     * @return mixed
+     */
+    public function onEnd()
+    {
+        // TODO: Implement onEnd() method.
+    }
 }

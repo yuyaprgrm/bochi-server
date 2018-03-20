@@ -42,8 +42,16 @@ interface Quest
 
     /**
      * クエスト完了時に呼ばれます
+     * 要は、クリア時です。
      * @return mixed
      */
     public function onCompletion();
+
+    /**
+     * クエスト終了時に呼ばれます
+     * 途中で退出した場合やユーザーがクエストをリタイアした場合など、完了したかどうかはかかわりません
+     * @return mixed
+     */
+    public function onEnd();
 
 }
