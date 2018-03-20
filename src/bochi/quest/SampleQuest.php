@@ -9,6 +9,7 @@
 namespace bochi\quest;
 
 
+use bochi\BochiCore;
 use pocketmine\Player;
 
 class SampleQuest extends BaseQuest
@@ -21,7 +22,8 @@ class SampleQuest extends BaseQuest
      */
     public function init(Player $player)
     {
-        // TODO: Implement init() method.
+        parent::init($player);
+        BochiCore::getInstance()->getLogger()->info("on init. ");
     }
 
     /**
@@ -30,6 +32,7 @@ class SampleQuest extends BaseQuest
      */
     public function onStart()
     {
+        BochiCore::getInstance()->getLogger()->info("on start. ");
         // TODO: Implement onStart() method.
     }
 

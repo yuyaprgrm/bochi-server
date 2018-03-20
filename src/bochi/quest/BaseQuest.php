@@ -24,7 +24,13 @@ abstract class BaseQuest implements Quest
         BaseQuest::$quests[$quest->getPlayer()->getName()] = $quest;
     }
 
-    private $player;
+    /** @var Player */
+    protected $player;
+
+    public function init(Player $player)
+    {
+        $this->player = $player;
+    }
 
     /**
      * @return Player

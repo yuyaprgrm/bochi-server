@@ -14,6 +14,7 @@ use bochi\command\BochiCoreCommand;
 use bochi\event\quest\EntryQuestEvent;
 use bochi\quest\Quest;
 use bochi\QuestCore;
+use bochi\task\QuestStartTask;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\command\ConsoleCommandSender;
@@ -38,7 +39,7 @@ class EntryQuestCommand extends BochiCoreCommand
     {
         if(!$sender instanceof Player) {
             $sender->sendMessage("This command must be used in the game.");
-            return;
+            return false;
         }
 
         if(count($args) < 1) {
@@ -54,5 +55,13 @@ class EntryQuestCommand extends BochiCoreCommand
         }
         $ev = new EntryQuestEvent($sender, $quest);
         BochiCore::getInstance()->getServer()->getPluginManager()->callEvent($ev);
+
+        if($ev->isCancelled()) { //キャンセルされたら
+            return false;
+        }
+
+        $quest->init($sender);
+
+        BochiCore::getInstance()->getServer()->getScheduler()->scheduleDelayedTask(new QuestStartTask(BochiCore::getInstance(), $quest), 20 * 5);
     }
 }
