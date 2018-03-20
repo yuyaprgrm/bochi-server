@@ -26,14 +26,12 @@ class EntryQuestEvent extends QuestEvent
      */
     public function isCancelled(): bool
     {
-        // TODO: Implement isCancelled() method.
     }
 
     /**
      * @param bool $value
      */
-    public function setCancelled(bool $value = \true)
+    public function setCancelled(bool $value = true)
     {
-        // TODO: Implement setCancelled() method.
     }
 }
