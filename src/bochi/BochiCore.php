@@ -14,6 +14,7 @@ use bochi\database\DatabaseManager;
 use bochi\task\DatabaseTask;
 use bochi\task\DisplayPopupTask;
 use bochi\utils\Display;
+use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
@@ -90,7 +91,24 @@ class BochiCore extends PluginBase
 
     public function displayPopup(Player $player) {
         $this->getServer()->getScheduler()->scheduleRepeatingTask(new DisplayPopupTask($this, $player), 20);
+    }
 
+    public function loginPlayer(PlayerLoginEvent $ev) {
+        $player = $ev->getPlayer();
+        $name = $player->getName();
+
+
+        $this->existsPlayerData($player, function () use($name){
+            $result = $this->getResult();
+            if(!$result) {
+                BochiCore::getInstance()->createPlayerData($name);
+            }
+        });
+
+        $this->displayPopup($player);
+        $display = Display::get($player);
+        $display->format = "§aHello §l%s§r§a !";
+        $display->args = [$name];
     }
 
     /** @var BochiCore */

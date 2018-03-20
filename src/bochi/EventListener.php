@@ -23,22 +23,9 @@ class EventListener implements Listener
     }
 
     public function onPlayerLogin(PlayerLoginEvent $ev) {
-        $player = $ev->getPlayer();
-        $name = $player->getName();
-        $func = function () use($name){
-            $result = $this->getResult();
-            if(!$result) {
-                BochiCore::getInstance()->createPlayerData($name);
-            }
-        };
-        BochiCore::getInstance()->existsPlayerData($player, $func);
-        BochiCore::getInstance()->displayPopup($player);
-        $display = Display::get($player);
-        $display->format = "§aHello §l%s§r§a !";
-        $display->args = [$name];
+        BochiCore::getInstance()->loginPlayer($ev);
     }
 
     public function onPlayerEntryQuest(EntryQuestEvent $ev) {
-
     }
 }
