@@ -8,6 +8,9 @@ author: fam!ma65536
 authors:
  - MasterF@github.com/famima65536
 
+depend:
+  - FormAPI
+
 permissions:
   bochicore.*:
     default: op
