@@ -6,16 +6,18 @@
  * Time: 20:26
  */
 
-namespace bochi\command;
+namespace bochi\command\quest;
 
 
+use bochi\BochiCore;
+use bochi\command\BochiCoreCommand;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 
-class EntryQuestCommand extends Command
+class EntryQuestCommand extends BochiCoreCommand
 {
 
-    public function __construct(string $name, string $description = "", string $usageMessage = \null, $aliases = [])
+    public function __construct(string $description = "", string $usageMessage = \null, $aliases = [])
     {
         parent::__construct("entry", $description, $usageMessage, $aliases);
     }
