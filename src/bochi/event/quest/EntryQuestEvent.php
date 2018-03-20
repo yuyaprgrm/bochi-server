@@ -20,18 +20,4 @@ class EntryQuestEvent extends QuestEvent
     {
         parent::__construct($player, $quest);
     }
-
-    /**
-     * @return bool
-     */
-    public function isCancelled(): bool
-    {
-    }
-
-    /**
-     * @param bool $value
-     */
-    public function setCancelled(bool $value = true)
-    {
-    }
 }

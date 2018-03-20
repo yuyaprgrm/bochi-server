@@ -9,14 +9,17 @@
 namespace bochi\quest;
 
 
+use pocketmine\Player;
+
 interface Quest
 {
 
     /**
      * クエストが開始される前に実行されます
+     * @param $player Player
      * @return mixed
      */
-    public function init();
+    public function init(Player $player);
 
     /**
      * クエスト開始時に実行されます

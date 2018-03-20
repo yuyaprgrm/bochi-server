@@ -32,7 +32,10 @@ class BochiCore extends PluginBase
     public function onEnable()
     {
         new EventListener();
-        QuestCore::getInstance()->registerCommands();
+        $quest_core = QuestCore::getInstance();
+        $quest_core->registerCommands();
+        $quest_core->registerQuests();
+
         $description = $this->getDescription();
         $this->getLogger()->info("Hello, Bochi core Alpha.");
         $this->getLogger()->info(sprintf(
