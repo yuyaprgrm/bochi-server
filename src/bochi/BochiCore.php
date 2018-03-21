@@ -94,7 +94,7 @@ class BochiCore extends PluginBase
     public function loginPlayer(PlayerLoginEvent $ev) {
         $player = $ev->getPlayer();
         $name = $player->getName();
-
+        QuestCore::getInstance()->wait($player);
 
         $this->existsPlayerData($name, function () use($name){
             $result = $this->getResult();

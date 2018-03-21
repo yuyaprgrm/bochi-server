@@ -10,6 +10,7 @@ namespace bochi\task;
 
 
 use bochi\quest\BaseQuest;
+use bochi\QuestCore;
 use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\plugin\Plugin;
 use pocketmine\scheduler\PluginTask;
@@ -35,7 +36,6 @@ class QuestStartTask extends PluginTask
      */
     public function onRun(int $currentTick)
     {
-        $this->quest->onStart();
-        $this->quest->calculateItemCount();
+        QuestCore::getInstance()->start($this->quest->getPlayer(), $this->quest);
     }
 }

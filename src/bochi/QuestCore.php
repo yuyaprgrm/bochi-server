@@ -11,11 +11,14 @@ namespace bochi;
 
 use bochi\quest\BaseQuest;
 use bochi\quest\Quest;
+use bochi\quest\QuestStatusId;
 use pocketmine\Player;
 
-class QuestCore
+class QuestCore implements QuestStatusId
 {
     static $instance;
+
+    public $status = [];
 
     public static function getInstance() : QuestCore {
         $instance = QuestCore::$instance ?? null;
@@ -55,5 +58,29 @@ class QuestCore
             return null;
         }
         return new $quest();
+    }
+
+    public function wait(Player $player) {
+        $name = $player->getName();
+        $this->status[$name] = QuestCore::WAIT;
+    }
+
+    public function entry(Player $player, BaseQuest $quest) {
+        $name = $player->getName();
+        $this->status[$name] = QuestCore::ENTRY;
+        BaseQuest::entry($quest);
+        $quest->start();
+    }
+
+    public function start(Player $player, BaseQuest $quest) {
+        $name = $player->getName();
+        $this->status[$name] = QuestCore::PLAY_QUEST;
+        $quest->onStart();
+    }
+
+    public function complete(Player $player, BaseQuest $quest) {
+        $name = $player->getName();
+        $this->status[$name] = QuestCore::COMPLETE_QUEST;
+        $quest->onCompletion();
     }
 }
