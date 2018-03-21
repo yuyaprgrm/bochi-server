@@ -36,9 +36,7 @@ class DatabaseTask extends AsyncTask
      */
     public function onRun()
     {
-
         $func = $this->func->bindTo($this);
-        var_dump($this->setting);
         $func(new DatabaseManager((array) $this->setting));
     }
 

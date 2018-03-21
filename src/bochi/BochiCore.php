@@ -96,7 +96,7 @@ class BochiCore extends PluginBase
         $name = $player->getName();
 
 
-        $this->existsPlayerData($player, function () use($name){
+        $this->existsPlayerData($name, function () use($name){
             $result = $this->getResult();
             if(!$result) {
                 BochiCore::getInstance()->createPlayerData($name);
