@@ -67,8 +67,7 @@ class BochiCore extends PluginBase
      */
     public function existsPlayerData(string $name, \Closure $callback) {
         $db_setting = $this->setting->get("Database");
-        $task = new DatabaseTask(function () use($name, $db_setting) {
-            $manager = new DatabaseManager($db_setting);
+        $task = new DatabaseTask($db_setting, function (DatabaseManager $manager) use($name) {
             $this->setResult($manager->getPlayerData($name) !== null);
             $manager->close();
         }, $callback);
@@ -81,8 +80,7 @@ class BochiCore extends PluginBase
      */
     public function createPlayerData(string $name) {
         $db_setting = $this->setting->get("Database");
-        $this->getServer()->getScheduler()->scheduleAsyncTask(new DatabaseTask(function () use($name, $db_setting){
-            $manager = new DatabaseManager($db_setting);
+        $this->getServer()->getScheduler()->scheduleAsyncTask(new DatabaseTask($db_setting, function (DatabaseManager $manager) use($name){
             $manager->createPlayerData($name);
             $manager->close();
         }, function() {
