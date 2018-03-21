@@ -16,17 +16,17 @@ use pocketmine\Server;
 class DatabaseTask extends AsyncTask
 {
     /** @var \Closure  */
-    private $func;
+    private $job;
     /** @var \Closure  */
-    private $completionFunc;
+    private $callback;
     /** @var array  */
     private $setting;
 
-    public function __construct(array $setting, \Closure $func, \Closure $completionFunc)
+    public function __construct(array $setting, \Closure $job, \Closure $callback)
     {
         $this->setting = $setting;
-        $this->func = $func;
-        $this->completionFunc = $completionFunc;
+        $this->job = $job;
+        $this->callback = $callback;
     }
 
     /**
@@ -36,13 +36,13 @@ class DatabaseTask extends AsyncTask
      */
     public function onRun()
     {
-        $func = $this->func->bindTo($this);
-        $func(new DatabaseManager((array) $this->setting));
+        $job = $this->job->bindTo($this);
+        $job(new DatabaseManager((array) $this->setting));
     }
 
     public function onCompletion(Server $server)
     {
-        $func = $this->completionFunc->bindTo($this);
-        $func();
+        $callback = $this->callback->bindTo($this);
+        $callback();
     }
 }

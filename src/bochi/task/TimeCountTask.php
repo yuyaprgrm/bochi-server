@@ -15,13 +15,13 @@ use pocketmine\scheduler\PluginTask;
 class TimeCountTask extends PluginTask
 {
     public $count;
-    public $func;
+    public $job;
 
-    public function __construct(Plugin $owner, int $times, \Closure $func)
+    public function __construct(Plugin $owner, int $times, \Closure $job)
     {
         parent::__construct($owner);
         $this->count = $times;
-        $this->func = $func;
+        $this->job = $job;
     }
 
     /**
@@ -38,7 +38,7 @@ class TimeCountTask extends PluginTask
             return;
         }
 
-        ($this->func)($this->count);
+        ($this->job)($this->count);
         $this->count--;
     }
 }

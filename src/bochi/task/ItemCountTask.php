@@ -57,7 +57,7 @@ class ItemCountTask extends AsyncTask
 
     public function onCompletion(Server $server)
     {
-        $func = $this->completionFunc->bindTo($this);
-        ($func)();
+        $callback = $this->callback->bindTo($this);
+        $callback();
     }
 }
