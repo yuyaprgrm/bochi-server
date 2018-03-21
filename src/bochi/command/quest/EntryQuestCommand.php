@@ -12,6 +12,7 @@ namespace bochi\command\quest;
 use bochi\BochiCore;
 use bochi\command\BochiCoreCommand;
 use bochi\event\quest\EntryQuestEvent;
+use bochi\quest\BaseQuest;
 use bochi\quest\Quest;
 use bochi\QuestCore;
 use bochi\task\QuestStartTask;
@@ -47,6 +48,7 @@ class EntryQuestCommand extends BochiCoreCommand
             return false;
         }
 
+        /** @var BaseQuest $quest */
         $quest = QuestCore::getInstance()->getQuest($args[0]);
 
         if($quest == null) {
@@ -61,7 +63,6 @@ class EntryQuestCommand extends BochiCoreCommand
         }
 
         $quest->init($sender);
-
-        BochiCore::getInstance()->getServer()->getScheduler()->scheduleDelayedTask(new QuestStartTask(BochiCore::getInstance(), $quest), 20 * 5);
+        $quest->start();
     }
 }

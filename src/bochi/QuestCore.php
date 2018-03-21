@@ -9,6 +9,7 @@
 namespace bochi;
 
 
+use bochi\quest\BaseQuest;
 use bochi\quest\Quest;
 use pocketmine\Player;
 
@@ -47,7 +48,7 @@ class QuestCore
         ];
     }
 
-    public function getQuest(string $name) : ?Quest{
+    public function getQuest(string $name) : ?BaseQuest{
 
         $quest = $this->quests[$name] ?? null;
         if($quest == null) {
