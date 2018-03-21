@@ -36,9 +36,9 @@ abstract class BaseQuest implements Quest
     }
 
     public function start() {
-        BochiCore::getInstance()->getServer()->getScheduler()->scheduleDelayedTask(new QuestStartTask(BochiCore::getInstance(), $this), 20 * 5);
+        BochiCore::getInstance()->getServer()->getScheduler()->scheduleDelayedTask(new QuestStartTask(BochiCore::getInstance(), $this), 20 * 3);
         BochiCore::getInstance()->getServer()->getScheduler()->scheduleRepeatingTask(
-            new TimeCountTask(BochiCore::getInstance(), 5, function ($count){
+            new TimeCountTask(BochiCore::getInstance(), 3, function ($count){
                 if($count > 0) {
                     $this->player->addTitle("§l§a${count}", "クエストの準備中です。", 2, 14, 2);
                 } else {

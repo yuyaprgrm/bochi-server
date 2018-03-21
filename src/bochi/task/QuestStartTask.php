@@ -36,5 +36,6 @@ class QuestStartTask extends PluginTask
     public function onRun(int $currentTick)
     {
         $this->quest->onStart();
+        $this->quest->calculateItemCount();
     }
 }

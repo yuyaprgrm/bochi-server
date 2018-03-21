@@ -10,6 +10,10 @@ namespace bochi\quest;
 
 
 use bochi\BochiCore;
+use bochi\task\ItemCountTask;
+use bochi\task\TimeCountTask;
+use bochi\utils\Display;
+use pocketmine\item\Item;
 use pocketmine\Player;
 
 class SampleQuest extends BaseQuest
@@ -33,25 +37,48 @@ class SampleQuest extends BaseQuest
     public function onStart()
     {
         BochiCore::getInstance()->getLogger()->info("on start. ");
-        // TODO: Implement onStart() method.
+        $display = Display::get($this->player);
+        $display->format = (
+            "Quest: サンプルクエスト\n".
+            "ターゲットアイテム: %s\n".
+            "残りアイテム数: %d\n".
+            "残りタイム: %d\n"
+        );
+        $display->args = [
+            "原木: 64コ",
+            64,
+            1000
+        ];
     }
 
     /**
      * アイテムを拾ったときに実行されます
+     * 絶対にItemCountTaskを呼んではならない
      * @return mixed
      */
     public function onPickupItem()
     {
-        // TODO: Implement onPickupItem() method.
     }
 
     /**
      * アイテムを落としたときに呼ばれます
+     * 絶対にItemCountTaskを呼んではならない
      * @return mixed
      */
     public function onDropItem()
     {
-        // TODO: Implement onDropItem() method.
+    }
+
+    public function calculateItemCount() {
+
+        BochiCore::getInstance()->getServer()->getScheduler()->scheduleRepeatingTask(new TimeCountTask(BochiCore::getInstance(), 200, function ($count) {
+            BochiCore::getInstance()->getServer()->getScheduler()->scheduleAsyncTask(
+                new ItemCountTask($this->getPlayer()->getName(), $this->player->getInventory()->getContents(), [Item::get(17, 0, 64)], function () {
+                    $player = BochiCore::getInstance()->getServer()->getPlayerExact($this->name);
+                    Display::get($player)->args[1] = 64 - $this->getResult()[Item::get(17, 0, 1)->getName()];
+                })
+            );
+        }), 20);
     }
 
     /**

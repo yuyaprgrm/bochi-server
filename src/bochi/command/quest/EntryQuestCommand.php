@@ -64,5 +64,6 @@ class EntryQuestCommand extends BochiCoreCommand
 
         $quest->init($sender);
         $quest->start();
+        BaseQuest::entry($quest);
     }
 }

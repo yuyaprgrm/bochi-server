@@ -9,8 +9,11 @@
 namespace bochi;
 
 use bochi\event\quest\EntryQuestEvent;
+use bochi\quest\BaseQuest;
 use bochi\utils\Display;
+use pocketmine\event\inventory\InventoryPickupItemEvent;
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerDropItemEvent;
 use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\Server;
 
@@ -24,6 +27,22 @@ class EventListener implements Listener
 
     public function onPlayerLogin(PlayerLoginEvent $ev) {
         BochiCore::getInstance()->loginPlayer($ev);
+    }
+
+    public function onPlayerDropItemEvent(PlayerDropItemEvent $ev) {
+        $quest = BaseQuest::get($ev->getPlayer());
+        if($quest != null) {
+            $quest->onDropItem($ev->getItem());
+        }
+    }
+
+    public function onPlayerItemPickup(InventoryPickupItemEvent $ev) {
+        $players = $ev->getViewers();
+        $player = array_pop($players);
+        $quest = BaseQuest::get($player);
+        if($quest != null) {
+            $quest->onDropItem();
+        }
     }
 
     public function onPlayerEntryQuest(EntryQuestEvent $ev) {

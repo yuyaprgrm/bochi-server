@@ -54,4 +54,6 @@ interface Quest
      */
     public function onEnd();
 
+    public function calculateItemCount();
+
 }

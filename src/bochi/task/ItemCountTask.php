@@ -15,16 +15,21 @@ use pocketmine\Server;
 
 class ItemCountTask extends AsyncTask
 {
-
+    /** @var string player_name */
     private $name;
-    private $items; /** @var Item[]  */
-    private $targets; /** @var Item[] */
+    /** @var Item[]  */
+    private $items;
+    /** @var Item[]  */
+    private $targets;
+    /** @var \Closure */
+    private $completionFunc;
 
-    public function  __construct(string $name, array $items, array $targets)
+    public function  __construct(string $name, array $items, array $targets, \Closure $completionFunc)
     {
         $this->name = $name;
         $this->items = $items;
         $this->targets = $targets;
+        $this->completionFunc = $completionFunc;
     }
 
     /**
@@ -42,7 +47,7 @@ class ItemCountTask extends AsyncTask
 
             foreach($this->items as $item) {
                 if($target->equals($item, true, false)) {
-                    $results[$item_name]++;
+                    $results[$item_name] += $item->getCount();
                 }
             }
         }
@@ -52,6 +57,7 @@ class ItemCountTask extends AsyncTask
 
     public function onCompletion(Server $server)
     {
-
+        $func = $this->completionFunc->bindTo($this);
+        ($func)();
     }
 }
