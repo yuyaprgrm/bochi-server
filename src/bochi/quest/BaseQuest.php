@@ -10,8 +10,10 @@ namespace bochi\quest;
 
 
 use bochi\BochiCore;
+use bochi\QuestCore;
 use bochi\task\QuestStartTask;
 use bochi\task\TimeCountTask;
+use bochi\utils\Display;
 use pocketmine\Player;
 
 abstract class BaseQuest implements Quest
@@ -29,10 +31,17 @@ abstract class BaseQuest implements Quest
 
     /** @var Player */
     protected $player;
+    /** @var bool */
+    protected $playing;
+    /** @var bool */
+    protected $finished;
 
     public function init(Player $player)
     {
+        BochiCore::getInstance()->getLogger()->info("on init.");
         $this->player = $player;
+        $this->playing = false;
+        $this->finished = false;
     }
 
     public function start() {
@@ -48,12 +57,50 @@ abstract class BaseQuest implements Quest
         );
     }
 
+    public function onStart()
+    {
+        if(!$this->player->isOnline()) {
+            QuestCore::getInstance()->end($this->player, $this);
+            return false;
+        }
+        BochiCore::getInstance()->getLogger()->info("on start.");
+        $this->playing = true;
+        return true;
+    }
+
+    public function onCompletion()
+    {
+        BochiCore::getInstance()->getLogger()->info("on completion.");
+        $this->finished = true;
+    }
+
+    public function onEnd() {
+        BochiCore::getInstance()->getLogger()->info("on end.");
+        $this->playing = false;
+    }
+
     /**
      * @return Player
      */
     public function getPlayer(): Player
     {
         return $this->player;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPlaying() : bool
+    {
+        return $this->playing;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasFinished() : bool
+    {
+        return $this->finished;
     }
 
 

@@ -12,6 +12,7 @@ namespace bochi;
 use bochi\quest\BaseQuest;
 use bochi\quest\Quest;
 use bochi\quest\QuestStatusId;
+use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\Player;
 
 class QuestCore implements QuestStatusId
@@ -82,5 +83,11 @@ class QuestCore implements QuestStatusId
         $name = $player->getName();
         $this->status[$name] = QuestCore::COMPLETE_QUEST;
         $quest->onCompletion();
+    }
+
+    public function end(Player $player, BaseQuest $quest) {
+        $name = $player->getName();
+        $this->status[$name] = QuestCore::WAIT;
+        $quest->onEnd();
     }
 }

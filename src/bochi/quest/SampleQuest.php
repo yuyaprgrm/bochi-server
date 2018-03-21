@@ -18,6 +18,10 @@ use pocketmine\Player;
 
 class SampleQuest extends BaseQuest
 {
+    /** @var TimeCountTask */
+    private $timeCounter;
+    /** @var ItemCountTask || null */
+    private $itemCounter = null;
 
     /**
      * クエストが開始される前に実行されます
@@ -27,7 +31,6 @@ class SampleQuest extends BaseQuest
     public function init(Player $player)
     {
         parent::init($player);
-        BochiCore::getInstance()->getLogger()->info("on init. ");
     }
 
     /**
@@ -36,8 +39,11 @@ class SampleQuest extends BaseQuest
      */
     public function onStart()
     {
-        BochiCore::getInstance()->getLogger()->info("on start. ");
-        $display = Display::get($this->player);
+        if(!parent::onStart()) {
+            return;
+        }
+        $player = $this->player;
+        $display = Display::get($player);
         $display->format = (
             "Quest: サンプルクエスト\n".
             "ターゲットアイテム: %s\n".
@@ -49,6 +55,15 @@ class SampleQuest extends BaseQuest
             64,
             1000
         ];
+
+        $this->timeCounter = new TimeCountTask(BochiCore::getInstance(), 1000, function (int $count) use($player){
+            Display::get($player)->args[2] = $count;
+            $this->showItemCount();
+        });
+
+        BochiCore::getInstance()->getServer()->getScheduler()->scheduleRepeatingTask(
+            $this->timeCounter, 20
+        );
     }
 
     /**
@@ -69,13 +84,17 @@ class SampleQuest extends BaseQuest
     {
     }
 
-    public function calculateItemCount() {
+    public function showItemCount() {
 
+        if($this->itemCounter != null and !$this->itemCounter->hasResult()) {
+            return; //多すぎると落ちる
+        }
+        $this->itemCounter = new ItemCountTask($this->getPlayer()->getName(), $this->player->getInventory()->getContents(), [Item::get(17, 0, 64)], function () {
+            $player = BochiCore::getInstance()->getServer()->getPlayerExact($this->name);
+            Display::get($player)->args[1] = 64 - $this->getResult()[Item::get(17, 0, 1)->getName()];
+        });
         BochiCore::getInstance()->getServer()->getScheduler()->scheduleAsyncTask(
-            new ItemCountTask($this->getPlayer()->getName(), $this->player->getInventory()->getContents(), [Item::get(17, 0, 64)], function () {
-                $player = BochiCore::getInstance()->getServer()->getPlayerExact($this->name);
-                Display::get($player)->args[1] = 64 - $this->getResult()[Item::get(17, 0, 1)->getName()];
-            })
+            $this->itemCounter
         );
     }
 
@@ -85,7 +104,7 @@ class SampleQuest extends BaseQuest
      */
     public function onCompletion()
     {
-        // TODO: Implement onCompletion() method.
+        parent::onCompletion();
     }
 
     /**
@@ -95,6 +114,9 @@ class SampleQuest extends BaseQuest
      */
     public function onEnd()
     {
-        // TODO: Implement onEnd() method.
+        if($this->playing) {
+            BochiCore::getInstance()->getServer()->getScheduler()->cancelTask($this->timeCounter->getTaskId());
+        }
+        parent::onEnd();
     }
 }

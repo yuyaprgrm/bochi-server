@@ -11,10 +11,12 @@ namespace bochi;
 
 
 use bochi\database\DatabaseManager;
+use bochi\quest\BaseQuest;
 use bochi\task\DatabaseTask;
 use bochi\task\DisplayPopupTask;
 use bochi\utils\Display;
 use pocketmine\event\player\PlayerLoginEvent;
+use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
@@ -107,6 +109,19 @@ class BochiCore extends PluginBase
         $display = Display::get($player);
         $display->format = "§aHello §l%s§r§a !";
         $display->args = [$name];
+    }
+
+    public function logoutPlayer(PlayerQuitEvent $ev) {
+        $player = $ev->getPlayer();
+        $name = $player->getName();
+        $quest = BaseQuest::get($player);
+
+        if($quest == null || !$quest->isPlaying()) {
+            return;
+        }
+
+        QuestCore::getInstance()->end($player, $quest);
+
     }
 
     /** @var BochiCore */

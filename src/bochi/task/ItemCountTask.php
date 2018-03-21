@@ -22,14 +22,14 @@ class ItemCountTask extends AsyncTask
     /** @var Item[]  */
     private $targets;
     /** @var \Closure */
-    private $completionFunc;
+    private $callback;
 
-    public function  __construct(string $name, array $items, array $targets, \Closure $completionFunc)
+    public function  __construct(string $name, array $items, array $targets, \Closure $callback)
     {
         $this->name = $name;
         $this->items = $items;
         $this->targets = $targets;
-        $this->completionFunc = $completionFunc;
+        $this->callback = $callback;
     }
 
     /**

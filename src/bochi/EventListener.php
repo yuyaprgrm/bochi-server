@@ -15,6 +15,7 @@ use pocketmine\event\inventory\InventoryPickupItemEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDropItemEvent;
 use pocketmine\event\player\PlayerLoginEvent;
+use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\Server;
 
 class EventListener implements Listener
@@ -29,10 +30,14 @@ class EventListener implements Listener
         BochiCore::getInstance()->loginPlayer($ev);
     }
 
+    public function onPlayerLogout(PlayerQuitEvent $ev) {
+        BochiCore::getInstance()->logoutPlayer($ev);
+    }
+
     public function onPlayerDropItemEvent(PlayerDropItemEvent $ev) {
         $quest = BaseQuest::get($ev->getPlayer());
         if($quest != null) {
-            $quest->onDropItem($ev->getItem());
+//            $quest->onDropItem($ev->getItem());
         }
     }
 
