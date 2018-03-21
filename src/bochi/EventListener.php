@@ -16,6 +16,7 @@ use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDropItemEvent;
 use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\event\player\PlayerQuitEvent;
+use pocketmine\inventory\PlayerInventory;
 use pocketmine\Server;
 
 class EventListener implements Listener
@@ -42,8 +43,11 @@ class EventListener implements Listener
     }
 
     public function onPlayerItemPickup(InventoryPickupItemEvent $ev) {
-        $players = $ev->getViewers();
-        $player = array_pop($players);
+        $inventory = $ev->getInventory();
+        if(!($inventory instanceof PlayerInventory)) {
+            return;
+        }
+        $player = $inventory->getHolder();
         $quest = BaseQuest::get($player);
         if($quest != null) {
             $quest->onDropItem();
