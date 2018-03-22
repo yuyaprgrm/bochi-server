@@ -62,7 +62,7 @@ class SampleQuest extends BaseQuest
         });
 
         BochiCore::getInstance()->getServer()->getScheduler()->scheduleRepeatingTask(
-            $this->timeCounter, 20
+            $this->timeCounter, 5
         );
     }
 
@@ -86,12 +86,13 @@ class SampleQuest extends BaseQuest
 
     public function showItemCount() {
 
-        if($this->itemCounter != null and !$this->itemCounter->hasResult()) {
+        if($this->itemCounter != null and !$this->itemCounter->isRunning()) {
             return; //多すぎると落ちる
         }
-        $this->itemCounter = new ItemCountTask($this->getPlayer()->getName(), $this->player->getInventory()->getContents(), [Item::get(17, 0, 64)], function () {
+
+        $this->itemCounter = new ItemCountTask($this->getPlayer()->getName(), $this->player->getInventory()->getContents(), function () {
             $player = BochiCore::getInstance()->getServer()->getPlayerExact($this->name);
-            Display::get($player)->args[1] = 64 - $this->getResult()[Item::get(17, 0, 1)->getName()];
+            Display::get($player)->args[1] = 64 - ($this->getResult()[Item::get(17, 0, 1)->getName()] ?? 0);
         });
         BochiCore::getInstance()->getServer()->getScheduler()->scheduleAsyncTask(
             $this->itemCounter

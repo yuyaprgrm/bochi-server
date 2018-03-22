@@ -19,15 +19,15 @@ class ItemCountTask extends AsyncTask
     private $name;
     /** @var Item[]  */
     private $items;
-    /** @var Item[]  */
-    private $targets;
     /** @var \Closure */
     private $callback;
 
-    public function  __construct(string $name, array $items, array $targets, \Closure $callback)
+    public function  __construct(string $name, array $items, \Closure $callback)
     {
         $this->name = $name;
-        $this->items = $items;
+        $this->items = array_map(function(Item $item) {
+            return [$item->getName(), $item->getCount()];
+        }, $items);
         $this->callback = $callback;
     }
 
@@ -40,7 +40,7 @@ class ItemCountTask extends AsyncTask
     {
         $results = [];
         foreach ($this->items as $item) {
-            $results[$item->getName()] = $item->getCount() + ($results[$item->getName()] ??  0);
+            $results[$item[0]] = $item[1] + ($results[$item[0]] ??  0);
         }
         $this->setResult($results);
     }
