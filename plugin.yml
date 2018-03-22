@@ -10,7 +10,9 @@ authors:
 
 depend:
   - FormAPI
-
+extensions:
+  - mysqli
+  
 permissions:
   bochicore.*:
     default: op
