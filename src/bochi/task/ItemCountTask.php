@@ -28,7 +28,6 @@ class ItemCountTask extends AsyncTask
     {
         $this->name = $name;
         $this->items = $items;
-        $this->targets = $targets;
         $this->callback = $callback;
     }
 
@@ -40,18 +39,9 @@ class ItemCountTask extends AsyncTask
     public function onRun()
     {
         $results = [];
-        foreach ($this->targets as $target) {
-            // Result set.
-            $item_name = $target->getName();
-            $results[$item_name] = 0;
-
-            foreach($this->items as $item) {
-                if($target->equals($item, true, false)) {
-                    $results[$item_name] += $item->getCount();
-                }
-            }
+        foreach ($this->items as $item) {
+            $results[$item->getName()] = $item->getCount() + ($results[$item->getName()] ??  0);
         }
-
         $this->setResult($results);
     }
 
